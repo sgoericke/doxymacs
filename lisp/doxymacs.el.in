@@ -1,5 +1,5 @@
 ;;; -*-emacs-lisp-*-
-;;; doxymacs.el --- ELisp package for making doxygen related stuff easier.
+;;; doxymacs.el.in --- ELisp package for making doxygen related stuff easier.
 ;;
 ;;
 ;; Copyright (C) 2001-2010 Ryan T. Sammartino
@@ -245,6 +245,14 @@
 (require 'xml-parse)
 (require 'url)
 (require 'tempo)
+
+(defface doxymacs-keyword-face
+  '((t (:italic t :foreground "#6a5acd")))
+  "Face to highlight doxygen keywords"
+  :group 'font-lock-highlighting-faces)
+(defvar doxy-keyword-face 'doxymacs-keyword-face)
+;;(setq doxy-keyword-face 'doxymacs-keyword-face)
+
 
 (defconst doxymacs-version "@VERSION@"
   "Doxymacs version number")
@@ -564,7 +572,7 @@ Key bindings:
 	    "\\|mainpage\\|name\\|overload\\|typedef\\|deprecated\\|par"
 	    "\\|addindex\\|line\\|skip\\|skipline\\|until\\|see"
 	    "\\|endlink\\|callgraph\\|endcond\\|else\\)\\)\\>")
-    '(0 font-lock-keyword-face prepend))
+    '(0 doxy-keyword-face prepend))
    ;; attention, warning, etc. given a different font
    (list
     "\\([@\\\\]\\(attention\\|warning\\|todo\\|bug\\)\\)\\>"
@@ -574,18 +582,21 @@ Key bindings:
     (concat "\\([@\\\\]\\(param\\(?:\\s-*\\[\\(?:in\\|out\\|in,out\\)\\]\\)?"
 	    "\\|tparam\\|a\\|namespace\\|relates\\(also\\)?"
 	    "\\|var\\|def\\)\\)\\s-+\\(\\sw+\\)")
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(4 font-lock-variable-name-face prepend))
    ;; keywords that take a type name as an argument
    (list
     (concat "\\([@\\\\]\\(class\\|struct\\|union\\|exception\\|enum"
 	    "\\|throw\\|interface\\|protocol\\)\\)\\s-+\\(\\(\\sw\\|:\\)+\\)")
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(3 font-lock-type-face prepend))
    ;; keywords that take a function name as an argument
    (list
     "\\([@\\\\]retval\\)\\s-+\\([^ \t\n]+\\)"
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(2 font-lock-function-name-face prepend))
    ;; bold
    (list
@@ -595,24 +606,28 @@ Key bindings:
    ;; code
    (list
     "\\([@\\\\][cp]\\)\\s-+\\([^ \t\n]+\\)"
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(2 (quote underline) prepend))
    ;; italics/emphasised
    (list
     "\\([@\\\\]e\\(m\\)?\\)\\s-+\\([^ \t\n]+\\)"
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(3 (quote italic) prepend))
    ;; keywords that take a list
    (list
     "\\([@\\\\]ingroup\\)\\s-+\\(\\(\\sw+\\s-*\\)+\\)\\s-*$"
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(2 font-lock-string-face prepend))
    ;; one argument that can contain arbitrary non-whitespace stuff
    (list
     (concat "\\([@\\\\]\\(link\\|copydoc\\|xrefitem"
 	    "\\|if\\(not\\)?\\|elseif\\)\\)"
 	    "\\s-+\\([^ \t\n]+\\)")
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(4 font-lock-string-face prepend))
    ;; one optional argument that can contain arbitrary non-whitespace stuff
    (list
@@ -629,19 +644,22 @@ Key bindings:
     (concat "\\([@\\\\]\\(example\\|\\(dont\\)?include\\|includelineno"
 	    "\\|htmlinclude\\|verbinclude\\)\\)\\s-+"
 	    "\\(\"?[~:\\/a-zA-Z0-9_. ]+\"?\\)")
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(4 font-lock-string-face prepend))
    ;; dotfile <file> ["caption"]
    (list
     (concat "\\([@\\\\]dotfile\\)\\s-+"
 	    "\\(\"?[~:\\/a-zA-Z0-9_. ]+\"?\\)\\(\\s-+\"[^\"]+\"\\)?")
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(2 font-lock-string-face prepend)
     '(3 font-lock-string-face prepend t))
    ;; image <format> <file> ["caption"] [<sizeindication>=<size>]
    (list
     "\\([@\\\\]image\\)\\s-+\\(html\\|latex\\)\\s-+\\(\"?[~:\\/a-zA-Z0-9_. ]+\"?\\)\\(\\s-+\"[^\"]+\"\\)?\\(\\s-+\\sw+=[0-9]+\\sw+\\)?"
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
+    ;; '(1 font-lock-keyword-face prepend)
     '(2 font-lock-string-face prepend)
     '(3 font-lock-string-face prepend)
     '(4 font-lock-string-face prepend t)
@@ -649,9 +667,9 @@ Key bindings:
    ;; one argument that has to be a word
    (list
     (concat "\\([@\\\\]\\(addtogroup\\|defgroup\\|weakgroup"
-	    "\\|page\\|anchor\\|ref\\|section\\|subsection"
+	    "\\|page\\|anchor\\|ref\\|section\\|subsection\\|subsubsection"
 	    "\\)\\)\\s-+\\(\\sw+\\)")
-    '(1 font-lock-keyword-face prepend)
+    '(1 doxy-keyword-face prepend)
     '(3 font-lock-string-face prepend))))
 
 (defun doxymacs-font-lock ()
